@@ -1,0 +1,21 @@
+{
+  "name": "@kindred/bot",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "grammy": "^1.36.3",
+    "@kindred/shared": "workspace:*",
+    "@kindred/db": "workspace:*",
+    "@kindred/ai": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "tsx": "^4.19.3"
+  }
+}

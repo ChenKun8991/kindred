@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(pnpm --version)",
+      "Bash(npm install *)",
+      "Bash(pnpm create *)",
+      "Bash(pnpm approve-builds *)",
+      "Bash(node -e ' *)",
+      "Bash(pnpm install *)",
+      "Bash(pnpm dlx *)",
+      "Bash(mkdir -p /Users/chenkun/Downloads/files_relationship_bot/apps/web/src/app/api/auth/\\\\[...nextauth\\\\])",
+      "Bash(mkdir -p /Users/chenkun/Downloads/files_relationship_bot/apps/web/src/app/dashboard/people/\\\\[id\\\\] /Users/chenkun/Downloads/files_relationship_bot/apps/web/src/app/actions /Users/chenkun/Downloads/files_relationship_bot/apps/web/src/components/people)",
+      "Bash(mkdir -p /Users/chenkun/Downloads/files_relationship_bot/apps/web/src/app/dashboard/people/\\\\[id\\\\]/edit)",
+      "Bash(mkdir -p /Users/chenkun/Downloads/files_relationship_bot/apps/web/src/app/dashboard/people/\\\\[id\\\\]/events/new /Users/chenkun/Downloads/files_relationship_bot/apps/web/src/components/events)",
+      "Bash(mkdir -p /Users/chenkun/Downloads/files_relationship_bot/apps/web/src/app/dashboard/people/\\\\[id\\\\]/log)",
+      "Bash(pnpm typecheck *)"
+    ],
+    "additionalDirectories": [
+      "/Users/chenkun/Downloads/files_relationship_bot/apps/web/src/app/api/auth",
+      "/Users/chenkun/Downloads/files_relationship_bot/apps/web/src/app/dashboard/people",
+      "/Users/chenkun/Downloads/files_relationship_bot/apps/web/src/app/dashboard/people/[id]",
+      "/Users/chenkun/Downloads/files_relationship_bot/apps/web/src/app/dashboard/people/[id]/events"
+    ]
+  }
+}

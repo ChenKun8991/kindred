@@ -20,10 +20,12 @@
       "Bash(/usr/local/bin/vercel --version)",
       "Bash(git init *)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(rm -rf apps/web/.git && git add -A && git commit -m \"Add all app files\" 2>&1 | tail -5)"
     ],
     "additionalDirectories": [
-      "/Users/chenkun"
+      "/Users/chenkun",
+      "/Users/chenkun/Downloads/files_relationship_bot/apps/web/.git"
     ]
   }
 }

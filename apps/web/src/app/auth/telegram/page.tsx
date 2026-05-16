@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 
-export default function TelegramCallbackPage() {
+function TelegramCallback() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -20,9 +20,15 @@ export default function TelegramCallbackPage() {
     }
   }, [searchParams]);
 
+  return <p className="text-muted-foreground">Signing you in…</p>;
+}
+
+export default function TelegramCallbackPage() {
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <p className="text-muted-foreground">Signing you in…</p>
+      <Suspense fallback={<p className="text-muted-foreground">Loading…</p>}>
+        <TelegramCallback />
+      </Suspense>
     </div>
   );
 }

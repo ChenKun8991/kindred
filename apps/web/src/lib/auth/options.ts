@@ -1,8 +1,6 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { TelegramAuthPayloadSchema } from "@kindred/shared";
-import { verifyTelegramPayload } from "./telegram";
-import { upsertUser, createFreeSubscription, getSubscription } from "@kindred/db";
+import { upsertUser, createFreeSubscription, getSubscription, getServiceClient } from "@kindred/db";
 
 declare module "next-auth" {
   interface Session {
@@ -24,33 +22,46 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       id: "telegram",
       name: "Telegram",
-      credentials: {},
-      async authorize(_, req) {
-        // The raw Telegram widget payload is sent as JSON in the request body
-        const raw =
-          typeof req.body === "object" ? req.body : JSON.parse(req.body ?? "{}");
-        const parsed = TelegramAuthPayloadSchema.safeParse(raw);
-        if (!parsed.success) return null;
+      credentials: {
+        token: { label: "Token", type: "text" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.token) return null;
 
-        const payload = verifyTelegramPayload(parsed.data);
+        const supabase = getServiceClient();
+        const { data, error } = await supabase
+          .from("login_tokens")
+          .select("token, telegram_id, telegram_data, verified_at, expires_at")
+          .eq("token", credentials.token)
+          .maybeSingle();
 
-        // Upsert user in DB
+        if (error || !data || !data.verified_at) return null;
+        if (new Date(data.expires_at) < new Date()) return null;
+
+        const tg = data.telegram_data as {
+          id: number;
+          first_name: string | null;
+          last_name: string | null;
+          username: string | null;
+        };
+
         const user = await upsertUser({
-          telegram_id: payload.id,
-          telegram_username: payload.username ?? null,
-          first_name: payload.first_name,
-          photo_url: payload.photo_url ?? null,
+          telegram_id: tg.id,
+          telegram_username: tg.username ?? null,
+          first_name: tg.first_name ?? "User",
+          photo_url: null,
         });
 
-        // Create free subscription if not exists
         const sub = await getSubscription(user.id);
         if (!sub) await createFreeSubscription(user.id);
+
+        // delete the token so it can't be reused
+        await supabase.from("login_tokens").delete().eq("token", credentials.token);
 
         return {
           id: user.id,
           name: user.first_name,
           image: user.photo_url,
-          // store extras in the object — picked up by jwt callback
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           telegramId: user.telegram_id as any,
         };
